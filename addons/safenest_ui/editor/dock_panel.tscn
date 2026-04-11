@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/safenest_ui/editor/dock_panel.gd" id="1"]
+
+[node name="SafeNestDock" type="VBoxContainer"]
+script = ExtResource("1")
+offset_right = 300.0
+offset_bottom = 200.0
+
+[node name="Title" type="Label" parent="."]
+text = "SafeNest UI"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="Separator1" type="HSeparator" parent="."]
+
+[node name="SelectedNodeLabel" type="Label" parent="."]
+unique_name_in_owner = true
+text = "Selected: (none)"
+autowrap_mode = 2
+
+[node name="MarginSpacer" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+
+[node name="ApplyButton" type="Button" parent="."]
+unique_name_in_owner = true
+text = "Apply Mobile Safe Layout"
+
+[node name="MarginSpacer2" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 4)
+
+[node name="StatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+text = ""
+autowrap_mode = 2

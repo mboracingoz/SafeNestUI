@@ -1,0 +1,156 @@
+📘 SafeNest UI — Product Documentation
+🧠 Overview
+
+SafeNest UI, Godot Engine 4.x için geliştirilmiş, mobil cihazlarda UI yerleşimini otomatik olarak güvenli alanlara (safe area) adapte eden hafif ve üretim odaklı bir editor eklentisidir.
+
+Amaç:
+Mobil UI problemlerini (notch, farklı ekran oranları, taşan HUD) tek tıkla çözmek.
+
+🎯 Problem Definition
+
+Mobil platformlarda UI geliştirme sırasında karşılaşılan temel problemler:
+
+Notch / punch-hole alanları
+Farklı aspect ratio’lar (16:9, 20:9 vs.)
+UI elementlerinin ekran dışına taşması
+Her cihaz için manuel düzenleme ihtiyacı
+
+Bu problemler özellikle:
+
+Solo developer’lar
+Mobile-first projeler
+Hızlı prototipleme süreçleri
+
+için ciddi zaman kaybına yol açar.
+
+💡 Solution
+
+SafeNest UI, bu problemi aşağıdaki şekilde çözer:
+
+Safe area verisini runtime’da okur
+Seçilen UI node’una otomatik layout uygular
+Tek tıkla mobil uyumlu hale getirir
+Debug overlay ile sonucu görselleştirir
+🚀 Core Features (V1)
+1. Safe Area Service
+Cihazın güvenli alan bilgilerini alır
+Runtime ortamında çalışır
+2. Auto UI Layout Fix (Core Feature)
+Seçilen Control node’una uygulanır
+Anchor + margin otomatik ayarlanır
+
+Primary Action:
+
+“Apply Mobile Safe Layout”
+
+3. Debug Overlay
+Safe area sınırlarını görselleştirir
+Açılıp kapatılabilir
+4. Editor Tool Panel
+Editor içinde dock panel
+Node seçimi + tek tık uygulama
+🧱 Architecture
+📁 Folder Structure
+addons/safenest_ui/
+ ├── plugin.cfg
+ ├── plugin.gd
+ ├── core/
+ │    ├── safe_area_service.gd
+ │    ├── layout_adapter.gd
+ ├── editor/
+ │    ├── dock_panel.tscn
+ │    ├── dock_panel.gd
+ │    ├── inspector_plugin.gd
+ ├── runtime/
+ │    ├── safe_area_overlay.gd
+ ├── demo/
+ │    ├── demo_scene.tscn
+🧩 Module Responsibilities
+safe_area_service.gd
+Safe area verisini hesaplar / sağlar
+layout_adapter.gd
+UI node’unu mobil uyumlu hale getirir
+dock_panel.gd
+Kullanıcı etkileşimi (UI panel)
+safe_area_overlay.gd
+Debug çizimleri
+🎮 Usage
+1. Addon’u aktif et
+Project Settings → Plugins → Enable
+2. UI node seç
+Control tabanlı bir node seç
+3. Tool panelden uygula
+“Apply Mobile Safe Layout” butonuna bas
+4. Debug overlay aç (opsiyonel)
+Safe area’yı görselleştir
+📦 Product Scope
+✅ Included (V1)
+Safe area hesaplama
+Auto layout fix
+Debug overlay
+Editor panel
+❌ Not Included (V1)
+Device preset sistemi
+Orientation handling
+Advanced responsive layouts
+Animation / transitions
+💰 Monetization Strategy
+Paid Version
+Platform: itch.io
+Fiyat: $3 – $5
+Free (Lite) Version
+Debug overlay içerir
+Auto layout fix içermez
+
+Amaç:
+
+Trafik çekmek
+Güven oluşturmak
+📈 Marketing Strategy
+Build in Public
+Günlük kısa videolar
+Geliştirme süreci paylaşımı
+Platformlar
+Reddit (r/godot, r/gamedev)
+Twitter (X)
+TikTok / YouTube Shorts
+Content Hook
+
+Before → After
+
+Bozuk mobil UI
+Tek tık fix sonrası düzgün UI
+🎬 Launch Assets
+10–15 saniyelik demo video
+GIF preview
+Kısa açıklama:
+Fix mobile UI instantly
+One-click setup
+Works with any Control node
+🧭 Roadmap
+V2
+Orientation support
+Layout presets
+V3
+Full responsive UI toolkit
+⚠️ Notes
+Tool küçük ama odaklıdır
+Amaç kompleks sistem değil, hızlı çözüm sunmaktır
+Gerçek değer: zaman kazandırmak
+🧠 Positioning
+
+“A lightweight mobile UI workflow tool for Godot developers.”
+
+Hedef kitle:
+
+Solo indie developer’lar
+Mobile game developer’lar
+Prototipleme yapan programmer’lar
+🔥 Sonuç
+
+SafeNest UI:
+
+Küçük scope
+Yüksek ihtiyaç
+Hızlı üretim
+Satılabilir ürün

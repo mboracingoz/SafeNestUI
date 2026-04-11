@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ic7glouukbdr"]
+
+[ext_resource type="Script" uid="uid://1m5l41wh7xfg" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1_glv2v"]
+
+[node name="Control" type="Control" unique_id=1893491104]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2135806449]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -44.0
+
+[node name="Control" type="Control" parent="." unique_id=41352524]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_glv2v")

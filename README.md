@@ -65,7 +65,9 @@ Simple and fast workflow inside the Godot editor.
    - Click **"Apply Mobile Safe Layout"**
 
 4. (Optional) Enable debug overlay:
-   - Visualize safe areas in real-time
+   - Add a `Control` node to your scene
+   - Attach `addons/safenest_ui/runtime/safe_area_overlay.gd` as its script
+   - Unsafe zones will be highlighted in red
 
 ---
 
@@ -87,7 +89,6 @@ addons/safenest_ui/
 ├── editor/
 │ ├── dock_panel.tscn
 │ ├── dock_panel.gd
-│ ├── inspector_plugin.gd
 ├── runtime/
 │ ├── safe_area_overlay.gd
 ├── demo/
