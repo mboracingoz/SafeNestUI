@@ -22,3 +22,4 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_glv2v")
+overlay_color = Color(0.9283157, 3.1284988e-05, 0.6592651, 0.2509804)
