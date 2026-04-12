@@ -21,7 +21,8 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var screen_size := get_viewport_rect().size
+	# Mantık Hatası Çözümü: Viewport veya monitör ebadını değil, Control'un kendi ebadını kullan!
+	var rect_size := size
 	var margins := SafeAreaService.get_safe_margins()
 
 	var top: float = margins["top"]
@@ -31,16 +32,16 @@ func _draw() -> void:
 
 	# Top unsafe zone.
 	if top > 0.0:
-		draw_rect(Rect2(0, 0, screen_size.x, top), overlay_color)
+		draw_rect(Rect2(0, 0, rect_size.x, top), overlay_color)
 
 	# Bottom unsafe zone.
 	if bottom > 0.0:
-		draw_rect(Rect2(0, screen_size.y - bottom, screen_size.x, bottom), overlay_color)
+		draw_rect(Rect2(0, rect_size.y - bottom, rect_size.x, bottom), overlay_color)
 
 	# Left unsafe zone (between top and bottom).
 	if left > 0.0:
-		draw_rect(Rect2(0, top, left, screen_size.y - top - bottom), overlay_color)
+		draw_rect(Rect2(0, top, left, rect_size.y - top - bottom), overlay_color)
 
 	# Right unsafe zone (between top and bottom).
 	if right > 0.0:
-		draw_rect(Rect2(screen_size.x - right, top, right, screen_size.y - top - bottom), overlay_color)
+		draw_rect(Rect2(rect_size.x - right, top, right, rect_size.y - top - bottom), overlay_color)

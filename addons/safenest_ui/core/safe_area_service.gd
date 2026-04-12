@@ -6,6 +6,9 @@
 class_name SafeAreaService
 
 
+static var current_editor_profile: ProfileDefinitions.Profile = ProfileDefinitions.Profile.MOBILE_PORTRAIT
+
+
 ## Returns the safe area as a Rect2 in pixels.
 ## On mobile devices, reads from DisplayServer.
 ## On desktop/editor, returns the full screen rect as fallback.
@@ -21,8 +24,14 @@ static func get_safe_area() -> Rect2:
 
 
 ## Returns safe area margins (top, bottom, left, right) in pixels.
-## Margins represent the unsafe zones from each screen edge.
-static func get_safe_margins() -> Dictionary:
+static func get_safe_margins(override_profile: int = -1) -> Dictionary:
+	if Engine.is_editor_hint():
+		var p: ProfileDefinitions.Profile = current_editor_profile
+		if override_profile != -1:
+			p = override_profile as ProfileDefinitions.Profile
+		return ProfileDefinitions.get_profile_data(p)["margins"]
+
+	# Runtime logic
 	var safe_rect := get_safe_area()
 	var screen_size := Vector2(DisplayServer.screen_get_size())
 
@@ -32,3 +41,14 @@ static func get_safe_margins() -> Dictionary:
 		"left": safe_rect.position.x,
 		"right": screen_size.x - safe_rect.end.x,
 	}
+
+	
+## Returns the ideal screen resolution depending on the selected profile (Editor) or Physical Device (Runtime).
+static func get_resolution(override_profile: int = -1) -> Vector2:
+	if Engine.is_editor_hint():
+		var p: ProfileDefinitions.Profile = current_editor_profile
+		if override_profile != -1:
+			p = override_profile as ProfileDefinitions.Profile
+		return ProfileDefinitions.get_profile_data(p)["resolution"]
+		
+	return Vector2(DisplayServer.screen_get_size())
