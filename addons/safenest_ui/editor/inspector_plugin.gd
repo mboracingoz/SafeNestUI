@@ -9,8 +9,9 @@ func setup(undo_redo: EditorUndoRedoManager) -> void:
 
 
 func _can_handle(object: Object) -> bool:
-	# Yalnızca Control tipindeki nesnelerde buton göster.
-	return object is Control
+	# Disabled to prevent conflict with Dock Panel placement modes.
+	# The Dock Panel is the only safe way to apply layout now.
+	return false
 
 
 func _parse_begin(object: Object) -> void:
