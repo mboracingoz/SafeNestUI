@@ -18,6 +18,33 @@ static func apply_safe_layout(node: Control) -> bool:
 		push_warning("SafeNest UI: Cannot apply safe layout directly to a Container's child ('%s'). Please apply it to the main HUD Control." % node.name)
 		return false
 
+	# --- STATELESS LAYOUT: Caching Original State ---
+	var meta_key := "safenest_original_layout"
+	if not node.has_meta(meta_key):
+		var orig_state = {
+			"anchor_left": node.anchor_left,
+			"anchor_top": node.anchor_top,
+			"anchor_right": node.anchor_right,
+			"anchor_bottom": node.anchor_bottom,
+			"offset_left": node.offset_left,
+			"offset_top": node.offset_top,
+			"offset_right": node.offset_right,
+			"offset_bottom": node.offset_bottom
+		}
+		node.set_meta(meta_key, orig_state)
+	else:
+		# Restore original layout to prevent additive distortion
+		var orig: Dictionary = node.get_meta(meta_key)
+		node.anchor_left = orig["anchor_left"]
+		node.anchor_top = orig["anchor_top"]
+		node.anchor_right = orig["anchor_right"]
+		node.anchor_bottom = orig["anchor_bottom"]
+		node.offset_left = orig["offset_left"]
+		node.offset_top = orig["offset_top"]
+		node.offset_right = orig["offset_right"]
+		node.offset_bottom = orig["offset_bottom"]
+	# ------------------------------------------------
+
 	var margins := SafeAreaService.get_safe_margins()
 	
 	# Hedefi ekranı kaplayacak şekilde (Full Rect) ayarlar.
@@ -27,9 +54,9 @@ static func apply_safe_layout(node: Control) -> bool:
 	node.anchor_bottom = 1.0
 
 	# Güvenli alan boşluklarını (Margins) offet olarak hedefe uygular.
-	node.offset_left = margins["left"]
-	node.offset_top = margins["top"]
-	node.offset_right = -margins["right"]
-	node.offset_bottom = -margins["bottom"]
+	node.offset_left = node.offset_left + margins["left"]
+	node.offset_top = node.offset_top + margins["top"]
+	node.offset_right = node.offset_right - margins["right"]
+	node.offset_bottom = node.offset_bottom - margins["bottom"]
 
 	return true
