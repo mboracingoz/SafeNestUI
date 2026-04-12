@@ -14,6 +14,14 @@ func setup(plugin: EditorPlugin, undo_redo: EditorUndoRedoManager) -> void:
 		var data = ProfileDefinitions.get_profile_data(profile_id)
 		%ProfileDropdown.add_item(data["name"], profile_id)
 		
+	# Connect Placement Integration
+	%PlacementDropdown.clear()
+	%PlacementDropdown.add_item("Full Screen (Root GUI)", LayoutAdapter.Placement.FULL_SCREEN)
+	%PlacementDropdown.add_item("Top Wide (Upper Bar)", LayoutAdapter.Placement.TOP_WIDE)
+	%PlacementDropdown.add_item("Bottom Wide (Lower Bar)", LayoutAdapter.Placement.BOTTOM_WIDE)
+	%PlacementDropdown.add_item("Keep Anchors (Offsets Only)", LayoutAdapter.Placement.KEEP_ANCHORS)
+	%PlacementDropdown.select(0)
+
 	%ProfileDropdown.item_selected.connect(_on_profile_selected)
 	%PreviewButton.pressed.connect(_on_preview_pressed)
 	%ApplyResButton.pressed.connect(_on_apply_res_pressed)
@@ -63,6 +71,7 @@ func _on_apply_layout_pressed() -> void:
 	if valid_controls.is_empty():
 		_set_status("No Control nodes selected.", true)
 		return
+	var placement_val := %PlacementDropdown.get_selected_id() as LayoutAdapter.Placement
 		
 	_undo_redo.create_action("Batch Apply Mobile Safe Layout")
 	for control in valid_controls:
@@ -74,7 +83,7 @@ func _on_apply_layout_pressed() -> void:
 		_undo_redo.add_undo_property(control, "offset_top", control.offset_top)
 		_undo_redo.add_undo_property(control, "offset_right", control.offset_right)
 		_undo_redo.add_undo_property(control, "offset_bottom", control.offset_bottom)
-		_undo_redo.add_do_method(LayoutAdapter, "apply_safe_layout", control)
+		_undo_redo.add_do_method(LayoutAdapter, "apply_safe_layout", control, placement_val)
 
 	_undo_redo.commit_action()
 	_set_status("Layout applied to %d node(s)." % valid_controls.size(), false)
