@@ -29,34 +29,36 @@ func _on_apply_pressed() -> void:
 		_set_status("No node selected.", true)
 		return
 
-	var node := selected_nodes[0]
-	if not node is Control:
-		_set_status("Selected node is not a Control.", true)
+	var valid_controls: Array[Control] = []
+	for node in selected_nodes:
+		if node is Control:
+			valid_controls.append(node as Control)
+
+	if valid_controls.is_empty():
+		_set_status("No Control nodes selected.", true)
 		return
 
-	var control := node as Control
+	# Start UndoRedo action. (Bütün değişiklikleri kapsayacak şekilde)
+	_undo_redo.create_action("Batch Apply Mobile Safe Layout")
 
-	# Start UndoRedo action.
-	_undo_redo.create_action("Apply Mobile Safe Layout")
+	for control in valid_controls:
+		# Record UNDO data: Save current state before changing anything.
+		_undo_redo.add_undo_property(control, "anchor_left", control.anchor_left)
+		_undo_redo.add_undo_property(control, "anchor_top", control.anchor_top)
+		_undo_redo.add_undo_property(control, "anchor_right", control.anchor_right)
+		_undo_redo.add_undo_property(control, "anchor_bottom", control.anchor_bottom)
+		_undo_redo.add_undo_property(control, "offset_left", control.offset_left)
+		_undo_redo.add_undo_property(control, "offset_top", control.offset_top)
+		_undo_redo.add_undo_property(control, "offset_right", control.offset_right)
+		_undo_redo.add_undo_property(control, "offset_bottom", control.offset_bottom)
 
-	# Record UNDO data: Save current state before changing anything.
-	_undo_redo.add_undo_property(control, "anchor_left", control.anchor_left)
-	_undo_redo.add_undo_property(control, "anchor_top", control.anchor_top)
-	_undo_redo.add_undo_property(control, "anchor_right", control.anchor_right)
-	_undo_redo.add_undo_property(control, "anchor_bottom", control.anchor_bottom)
-	_undo_redo.add_undo_property(control, "offset_left", control.offset_left)
-	_undo_redo.add_undo_property(control, "offset_top", control.offset_top)
-	_undo_redo.add_undo_property(control, "offset_right", control.offset_right)
-	_undo_redo.add_undo_property(control, "offset_bottom", control.offset_bottom)
-
-	# Record DO data: Apply the layout.
-	_undo_redo.add_do_method(LayoutAdapter, "apply_safe_layout", control)
+		# Record DO data: Apply the layout.
+		_undo_redo.add_do_method(LayoutAdapter, "apply_safe_layout", control)
 
 	# Commit the action.
 	_undo_redo.commit_action()
 
-	_set_status("Layout applied with Undo support: " + control.name, false)
-
+	_set_status("Layout applied to %d node(s)." % valid_controls.size(), false)
 
 func _set_status(message: String, is_error: bool) -> void:
 	%StatusLabel.text = message
@@ -66,5 +68,5 @@ func _set_status(message: String, is_error: bool) -> void:
 		%StatusLabel.add_theme_color_override("font_color", Color.LAWN_GREEN)
 
 
-func update_selected_node_label(node_name: String) -> void:
-	%SelectedNodeLabel.text = "Selected: " + node_name
+func update_selected_node_label(text: String) -> void:
+	%SelectedNodeLabel.text = text

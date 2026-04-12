@@ -44,9 +44,13 @@ func _on_selection_changed() -> void:
 	var selected := get_editor_interface().get_selection().get_selected_nodes()
 
 	if selected.is_empty():
-		_dock_panel.update_selected_node_label("(none)")
+		_dock_panel.update_selected_node_label("Selected: (none)")
+		return
+
+	if selected.size() > 1:
+		_dock_panel.update_selected_node_label("Selected: %d nodes" % selected.size())
 		return
 
 	var node := selected[0]
 	var type_hint := " (Control ✓)" if node is Control else " (not a Control)"
-	_dock_panel.update_selected_node_label(node.name + type_hint)
+	_dock_panel.update_selected_node_label("Selected: " + node.name + type_hint)
