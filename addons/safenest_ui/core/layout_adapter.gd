@@ -99,3 +99,29 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 			node.offset_bottom = node.offset_bottom - margins["bottom"]
 
 	return true
+
+
+## Restores the node to its original layout cached before the first safe layout was applied.
+## Returns true if a cached state was found and restored, false if none exists.
+static func restore_original_layout(node: Control) -> bool:
+	if node == null:
+		return false
+
+	var meta_key := "safenest_original_layout"
+	if not node.has_meta(meta_key):
+		push_warning("SafeNest UI: No original layout cached for '%s'. Apply a layout first." % node.name)
+		return false
+
+	var orig: Dictionary = node.get_meta(meta_key)
+	node.anchor_left = orig["anchor_left"]
+	node.anchor_top = orig["anchor_top"]
+	node.anchor_right = orig["anchor_right"]
+	node.anchor_bottom = orig["anchor_bottom"]
+	node.offset_left = orig["offset_left"]
+	node.offset_top = orig["offset_top"]
+	node.offset_right = orig["offset_right"]
+	node.offset_bottom = orig["offset_bottom"]
+
+	# Clear the cache so a subsequent apply_safe_layout recaches the restored state.
+	node.remove_meta(meta_key)
+	return true
