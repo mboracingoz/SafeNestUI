@@ -2,7 +2,12 @@
 
 [ext_resource type="Script" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
 
-[node name="MobilePortraitDemo" type="Node"]
+[node name="MobilePortraitDemo" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 1170.0
+clip_contents = true
 
 [node name="GameWorldBackground" type="ColorRect" parent="."]
 anchors_preset = 15
