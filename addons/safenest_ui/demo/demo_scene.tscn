@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://btx5wpybjamg7"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" uid="uid://1m5l41wh7xfg" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
+[ext_resource type="Script" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
 bg_color = Color(0.15, 0.15, 0.2, 1)
 
-[node name="DemoScene" type="Control" unique_id=2007335620]
+[node name="DemoScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="Panel" parent="." unique_id=1712123850]
+[node name="Background" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,42 +22,88 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1")
 
-[node name="ContentArea" type="VBoxContainer" parent="." unique_id=721579431]
+[node name="ContentArea" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterText" type="VBoxContainer" parent="ContentArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="ContentArea" unique_id=342091322]
+[node name="Title" type="Label" parent="ContentArea/CenterText"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
 text = "SafeNest UI — Demo"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
 
-[node name="Spacer" type="Control" parent="ContentArea" unique_id=1418333006]
+[node name="Spacer" type="Control" parent="ContentArea/CenterText"]
+layout_mode = 2
 custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
 
-[node name="Button" type="Button" parent="ContentArea/Spacer" unique_id=1828262506]
-custom_minimum_size = Vector2(250, 250)
-layout_mode = 0
-offset_left = 58.0
-offset_top = -14.0
-offset_right = 308.0
-offset_bottom = 236.0
-
-[node name="Description" type="Label" parent="ContentArea" unique_id=1593806499]
+[node name="Description" type="Label" parent="ContentArea/CenterText"]
 layout_mode = 2
-text = "This content area should stay within the safe zone.
-Use the SafeNest UI dock panel to apply safe layout to the ContentArea node."
+text = "Select the 'ContentArea' node and click Apply.
+Watch the corner buttons move out of the unsafe zones!"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="SafeAreaOverlay" type="Control" parent="." unique_id=50340227]
+[node name="TopLeftButton" type="Button" parent="ContentArea"]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 56.0
+text = "Menu"
+
+[node name="TopRightButton" type="Button" parent="ContentArea"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -106.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 56.0
+grow_horizontal = 0
+text = "Pause"
+
+[node name="BottomLeftButton" type="Button" parent="ContentArea"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -56.0
+offset_right = 96.0
+offset_bottom = -16.0
+grow_vertical = 0
+text = "Joystick"
+
+[node name="BottomRightButton" type="Button" parent="ContentArea"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -106.0
+offset_top = -56.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Attack"
+
+[node name="SafeAreaOverlay" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

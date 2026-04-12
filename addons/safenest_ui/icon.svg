@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+  <!-- Phone Outline -->
+  <rect x="3" y="1" width="10" height="14" rx="1.5" fill="none" stroke="#E0E0E0" stroke-width="1.5"/>
+  <!-- Top notch block -->
+  <rect x="3" y="1" width="10" height="2" fill="#E0E0E0"/>
+  <!-- Bottom nav block -->
+  <rect x="3" y="13" width="10" height="2" fill="#E0E0E0"/>
+  <!-- Safe Area Indicator (Green) -->
+  <rect x="4" y="4" width="8" height="8" rx="0.5" fill="#4CAF50"/>
+</svg>
