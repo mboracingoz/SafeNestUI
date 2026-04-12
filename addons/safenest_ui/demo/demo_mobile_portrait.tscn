@@ -1,0 +1,131 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
+
+[node name="MobilePortraitDemo" type="Node"]
+
+[node name="GameWorldBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.35, 1)
+
+[node name="WorldText" type="Label" parent="GameWorldBackground"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -60.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "🌌 VERTICAL GAME WORLD 🌌
+(Resize Godot Window to Portrait)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CanvasLayerHUD" type="CanvasLayer" parent="."]
+
+[node name="HUD_Container" type="Control" parent="CanvasLayerHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopPanel" type="ColorRect" parent="CanvasLayerHUD/HUD_Container"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayerHUD/HUD_Container/TopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "SCORE: 10420"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SettingsBtn" type="Button" parent="CanvasLayerHUD/HUD_Container/TopPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -20.0
+offset_right = 66.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "⚙️"
+
+[node name="PauseBtn" type="Button" parent="CanvasLayerHUD/HUD_Container/TopPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -20.0
+offset_right = -16.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "| |"
+
+[node name="BottomSkills" type="HBoxContainer" parent="CanvasLayerHUD/HUD_Container"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+theme_override_constants/separation = 30
+
+[node name="Skill1" type="Button" parent="CanvasLayerHUD/HUD_Container/BottomSkills"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🔥"
+
+[node name="Skill2" type="Button" parent="CanvasLayerHUD/HUD_Container/BottomSkills"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "🛡️"
+
+[node name="Skill3" type="Button" parent="CanvasLayerHUD/HUD_Container/BottomSkills"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "⚡"
+
+[node name="SafeAreaOverlay" type="Control" parent="CanvasLayerHUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1")
