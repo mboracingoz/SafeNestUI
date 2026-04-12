@@ -14,7 +14,7 @@ extends Control
 
 
 func _ready() -> void:
-	# Preview sistemi için kendini dinleyici gruba ekler
+	# Add to listener group for editor-time preview updates
 	add_to_group("safe_area_overlay")
 	# Fill the entire screen.
 	anchors_preset = PRESET_FULL_RECT
@@ -23,7 +23,8 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	# Mantık Hatası Çözümü: Viewport veya monitör ebadını değil, Control'un kendi ebadını kullan!
+	# Logic: Use the Control's own size instead of the viewport to ensure 
+	# correct scaling within the editor layout.
 	var rect_size := size
 	var margins := SafeAreaService.get_safe_margins()
 

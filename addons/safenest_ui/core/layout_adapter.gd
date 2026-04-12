@@ -21,7 +21,8 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 		push_warning("SafeNest UI: No node provided.")
 		return false
 
-	# Kural: Eğer nesne bir Container'ın çocuğuysa, ona margin (offset) uygulanamaz çünkü Container buna izin vermez.
+	# Rule: If the node is a child of a Container, margins (offsets) cannot be applied 
+	# because the Container manages its children's positions.
 	if node.get_parent() is Container:
 		push_warning("SafeNest UI: Cannot apply safe layout directly to a Container's child ('%s'). Please apply it to the main HUD Control." % node.name)
 		return false
@@ -54,11 +55,11 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 	# ------------------------------------------------
 
 	var margins := SafeAreaService.get_safe_margins()
-	var orig_height := node.size.y # Orijinal yüksekliği korumak için referans
+	var orig_height := node.size.y # Reference to preserve original height
 	
 	match placement:
 		Placement.FULL_SCREEN:
-			# Hedefi ekranı kaplayacak şekilde (Full Rect) ayarlar.
+			# Sets the target to fill the screen (Full Rect).
 			node.anchor_left = 0.0
 			node.anchor_top = 0.0
 			node.anchor_right = 1.0
@@ -69,7 +70,7 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 			node.offset_bottom = -margins["bottom"]
 			
 		Placement.TOP_WIDE:
-			# Hedefi yukarı asar, alt offset'i orjinal yüksekliğine göre çizer.
+			# Snaps target to top, sets bottom offset relative to original height.
 			node.anchor_left = 0.0
 			node.anchor_top = 0.0
 			node.anchor_right = 1.0
@@ -80,7 +81,7 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 			node.offset_bottom = margins["top"] + orig_height
 
 		Placement.BOTTOM_WIDE:
-			# Hedefi aşağı asar, üst offset'i orjinal yüksekliğine göre negatif çizer.
+			# Snaps target to bottom, sets top offset relative to original height.
 			node.anchor_left = 0.0
 			node.anchor_top = 1.0
 			node.anchor_right = 1.0
@@ -91,7 +92,7 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 			node.offset_bottom = -margins["bottom"]
 
 		Placement.KEEP_ANCHORS:
-			# Anchorlara dokunmadan sadece güvenli boşlukları daraltır.
+			# Keeps anchors as is, only shrinks offsets within safe bounds.
 			node.offset_left = node.offset_left + margins["left"]
 			node.offset_top = node.offset_top + margins["top"]
 			node.offset_right = node.offset_right - margins["right"]
