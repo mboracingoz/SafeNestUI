@@ -1,149 +1,68 @@
 # 📱 SafeNest UI
 
-A lightweight and production-ready mobile UI toolkit for Godot 4 that fixes safe area, notch, and screen ratio issues with a single click.
+A professional-grade, cross-platform UI Safe Area simulator and smart layout manager for Godot 4. Manage notches, taskbars, and safe margin bounds seamlessly directly within the editor!
 
 ---
 
-## 🧠 Overview
+## ⚡ Overview
 
-SafeNest UI is a Godot 4 addon designed to solve one of the most common problems in mobile game development:
+Mobile and cross-platform UI development doesn't have to be a guessing game. **SafeNest UI** allows developers to simulate how their UI will look on various devices (Phones, Tablets, Web Browsers) *without leaving the Godot editor* or needing to export the project. 
 
-> UI elements breaking across different devices.
-
-Instead of manually adjusting anchors and margins for every resolution, SafeNest UI lets you fix your layout instantly.
+It provides a unified **Dock Panel** to preview safe areas non-destructively and instantly adapt your UI components using **Smart Placement** algorithms.
 
 ---
 
-## 🎯 Problem
+## 🔥 Key Features
 
-Mobile UI development is painful because of:
+### 🎮 Multi-Device Simulation Profile
+Instantly preview how your application looks across different form factors. Built-in constraints include:
+- `Mobile Portrait` & `Mobile Landscape`
+- `Tablet Portrait`
+- `Desktop 16:9` (Windowed simulation)
+- `Web Browser 16:9`
 
-- Notches and punch-hole cameras
-- Different aspect ratios (16:9, 20:9, etc.)
-- UI elements going off-screen
-- Time wasted on manual adjustments
+### 🛡️ Non-Destructive Preview
+Easily preview safe boundaries and comfort margins with a visual red overlay directly on your 2D canvas without permanently modifying your `ProjectSettings`. Want to officially scale the Editor window to match? Just hit the "Apply Resolution" button.
 
----
+### 🧠 Smart Placement Auto-Layout
+Godot UI anchors can be tricky. SafeNest UI comes with an intelligent layout adapter that avoids destructively stretching sub-components:
+- **Full Screen:** Adapts root canvas elements to the exact safe zone padding.
+- **Top Wide:** Snaps top-bars cleanly beneath notches without altering original heights.
+- **Bottom Wide:** Snaps bottom action-bars cleanly above home-indicators.
+- **Keep Anchors:** Preserves your custom ratios, applying protective margin padding dynamically.
 
-## 💡 Solution
-
-SafeNest UI provides:
-
-- Automatic safe area detection
-- One-click layout fixing
-- Clean and lightweight implementation
-- Debug visualization
-
----
-
-## 🚀 Features
-
-### ✅ One-Click Mobile Layout Fix
-Select any `Control` node and apply a mobile-safe layout instantly.
-
-### 📐 Safe Area Support
-Automatically adapts your UI to device safe areas.
-
-### 🧪 Debug Overlay
-Visualize safe area boundaries directly on screen.
-
-### 🧩 Editor Integration
-Simple and fast workflow inside the Godot editor.
+### 💾 Stateless Layout Memory
+Mistakes happen, device targets change. SafeNest UI inherently caches your original node layouts via Godot's internal metadata system. You can switch between 5 different device profiles and the addon will perfectly reset your UI to its original pristine state before computing the new margins. No infinite squashing, no UI corruption!
 
 ---
 
-## 🎮 How to Use
+## 🕹️ Quick Start Guide
 
-1. Enable the plugin:
-   - Go to **Project Settings → Plugins**
-   - Enable **SafeNest UI**
+1. **Install:** Copy `addons/safenest_ui` to your project and activate from **Project Settings → Plugins**.
+2. **Access the Hub:** A new `SafeNest UI` tab will appear in your godot Dock.
+3. **Simulate:** Select an emulation profile (e.g., *Mobile Portrait*) and click **Preview Profile**. 
+4. **Target:** Select your root UI node or your specific HUD bar in the scene tree.
+5. **Apply Smart Placement:** From the Dock Dropdown, specify how your UI should behave (e.g. `Top Wide`) and hit **Apply Safe Layout**.
 
-2. Select your UI node:
-   - Choose any `Control` node in your scene
-
-3. Apply layout:
-   - Click **"Apply Mobile Safe Layout"**
-
-4. (Optional) Enable debug overlay:
-   - Add a `Control` node to your scene
-   - Attach `addons/safenest_ui/runtime/safe_area_overlay.gd` as its script
-   - Unsafe zones will be highlighted in red
+*💡 Try out the provided demonstration environment in `addons/safenest_ui/demo/demo_smart_placement.tscn` to master the mechanics!*
 
 ---
 
-## 📦 Installation
-
-1. Download or clone this repository
-2. Copy the `addons/safenest_ui` folder into your project
-3. Enable the plugin in Project Settings
-
----
-
-## 🧱 Project Structure
-addons/safenest_ui/
-├── plugin.cfg
-├── plugin.gd
-├── core/
-│ ├── safe_area_service.gd
-│ ├── layout_adapter.gd
-├── editor/
-│ ├── dock_panel.tscn
-│ ├── dock_panel.gd
-├── runtime/
-│ ├── safe_area_overlay.gd
-├── demo/
-│ ├── demo_scene.tscn
+## 🏗️ Technical Architecture
+The addon was engineered with enterprise-level precision using the Single Responsibility Principle (SRP):
+*   `ProfileDefinitions`: Pure static data layer for form factors.
+*   `SafeAreaService`: Core service handling margin conversions and logic dispatching.
+*   `ProjectProfileApplier`: Strict mutator that explicitly isolates `ProjectSettings` overriding actions.
+*   `LayoutAdapter`: The stateless layout engine fully supporting Godot's `EditorUndoRedoManager` ecosystem.
 
 ---
 
-## 🧭 Roadmap
-
-### V1
-- Safe area detection
-- One-click layout fix
-- Debug overlay
-
-### V2
-- Orientation support
-- Layout presets
-
-### V3
-- Advanced responsive UI toolkit
-
----
-
-## 💰 Monetization
-
-This project is part of a larger product strategy:
-
-- Free version (limited features)
-- Paid version (itch.io)
-
----
-
-## 🎯 Target Audience
-
-- Indie developers
-- Mobile game developers
-- Godot users struggling with UI scaling
-- Rapid prototyping workflows
-
----
-
-## ⚠️ Notes
-
-- Designed to be lightweight and fast
-- Built with clean architecture in mind
-- Focused on solving real problems, not adding unnecessary complexity
-
----
-
-## ❤️ Contributing
-
-Currently focused on core development. Contributions may be considered in the future.
+## 🛣️ Roadmap
+- Custom User Profiles (Defining custom resolutions and notch values)
+- Visual Live Editors
+- Runtime Reactive Safe Area Nodes
 
 ---
 
 ## 📄 License
-
 [MIT License](LICENSE)
