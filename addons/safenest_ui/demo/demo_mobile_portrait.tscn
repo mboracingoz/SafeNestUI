@@ -5,9 +5,21 @@
 [node name="MobilePortraitDemo" type="Control" unique_id=491402835]
 clip_contents = true
 layout_mode = 3
-anchors_preset = 0
-offset_right = 540.0
-offset_bottom = 1170.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = -34.0
+metadata/safenest_original_layout = {
+"anchor_bottom": 0.0,
+"anchor_left": 0.0,
+"anchor_right": 0.0,
+"anchor_top": 0.0,
+"offset_bottom": 1170.0,
+"offset_left": 0.0,
+"offset_right": 540.0,
+"offset_top": 0.0
+}
 
 [node name="GameWorldBackground" type="ColorRect" parent="." unique_id=1713740169]
 layout_mode = 0

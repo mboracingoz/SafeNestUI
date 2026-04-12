@@ -17,14 +17,19 @@ enum Placement {
 }
 
 static func apply_safe_layout(node: Control, placement: Placement = Placement.FULL_SCREEN) -> bool:
+	# Guard: null check
 	if node == null:
 		push_warning("SafeNest UI: No node provided.")
 		return false
 
-	# Rule: If the node is a child of a Container, margins (offsets) cannot be applied 
-	# because the Container manages its children's positions.
+	# Guard: must be a Control — caller from dock panel already filters, but belt-and-suspenders.
+	if not node is Control:
+		push_warning("SafeNest UI: Node '%s' is not a Control. Skipping." % node.name)
+		return false
+
+	# Guard: Container children cannot have manual offsets applied.
 	if node.get_parent() is Container:
-		push_warning("SafeNest UI: Cannot apply safe layout directly to a Container's child ('%s'). Please apply it to the main HUD Control." % node.name)
+		push_warning("SafeNest UI: Cannot apply safe layout directly to a Container's child ('%s'). Apply it to the parent instead." % node.name)
 		return false
 
 	# --- STATELESS LAYOUT: Caching Original State ---
@@ -104,6 +109,7 @@ static func apply_safe_layout(node: Control, placement: Placement = Placement.FU
 ## Restores the node to its original layout cached before the first safe layout was applied.
 ## Returns true if a cached state was found and restored, false if none exists.
 static func restore_original_layout(node: Control) -> bool:
+	# Guard: null check
 	if node == null:
 		return false
 
@@ -112,14 +118,29 @@ static func restore_original_layout(node: Control) -> bool:
 		push_warning("SafeNest UI: No original layout cached for '%s'. Apply a layout first." % node.name)
 		return false
 
-	var orig: Dictionary = node.get_meta(meta_key)
-	node.anchor_left = orig["anchor_left"]
-	node.anchor_top = orig["anchor_top"]
-	node.anchor_right = orig["anchor_right"]
+	var orig = node.get_meta(meta_key)
+
+	# Guard: Integrity check — ensure meta is a Dictionary with exactly the expected keys.
+	var required_keys := ["anchor_left", "anchor_top", "anchor_right", "anchor_bottom",
+						  "offset_left", "offset_top", "offset_right", "offset_bottom"]
+	if not orig is Dictionary:
+		push_error("SafeNest UI: Cached layout for '%s' is corrupted (not a Dictionary). Removing." % node.name)
+		node.remove_meta(meta_key)
+		return false
+	for key in required_keys:
+		if not orig.has(key):
+			push_error("SafeNest UI: Cached layout for '%s' is missing key '%s'. Removing." % [node.name, key])
+			node.remove_meta(meta_key)
+			return false
+
+	# Restore anchors and offsets
+	node.anchor_left   = orig["anchor_left"]
+	node.anchor_top    = orig["anchor_top"]
+	node.anchor_right  = orig["anchor_right"]
 	node.anchor_bottom = orig["anchor_bottom"]
-	node.offset_left = orig["offset_left"]
-	node.offset_top = orig["offset_top"]
-	node.offset_right = orig["offset_right"]
+	node.offset_left   = orig["offset_left"]
+	node.offset_top    = orig["offset_top"]
+	node.offset_right  = orig["offset_right"]
 	node.offset_bottom = orig["offset_bottom"]
 
 	# Clear the cache so a subsequent apply_safe_layout recaches the restored state.

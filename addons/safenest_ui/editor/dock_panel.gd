@@ -4,6 +4,9 @@ extends VBoxContainer
 var _editor_plugin: EditorPlugin
 var _undo_redo: EditorUndoRedoManager
 
+# Guard: prevents any layout action from firing while a preview redraw is in progress.
+var _is_previewing: bool = false
+
 
 func setup(plugin: EditorPlugin, undo_redo: EditorUndoRedoManager) -> void:
 	_editor_plugin = plugin
@@ -67,8 +70,14 @@ func _update_info_label(profile_id: ProfileDefinitions.Profile) -> void:
 
 
 func _on_preview_pressed() -> void:
+	# Preview is strictly non-destructive: it only signals overlays to redraw.
+	# It must NEVER call apply_safe_layout or modify any node properties.
+	if _is_previewing:
+		return
+	_is_previewing = true
 	get_tree().call_group("safe_area_overlay", "queue_redraw")
-	_set_status("Overlay updated — no project settings changed.", false)
+	_is_previewing = false
+	_set_status("Preview refreshed — no nodes or settings modified.", false)
 
 
 func _on_apply_res_pressed() -> void:
@@ -135,10 +144,27 @@ func update_selected_node_label(text: String) -> void:
 
 func _get_selected_controls() -> Array[Control]:
 	var selection := _editor_plugin.get_editor_interface().get_selection()
+	var selected_nodes := selection.get_selected_nodes()
+
+	# Guard: nothing selected at all
+	if selected_nodes.is_empty():
+		return []
+
 	var result: Array[Control] = []
-	for node in selection.get_selected_nodes():
+	var non_control_count := 0
+	for node in selected_nodes:
 		if node is Control:
 			result.append(node as Control)
+		else:
+			non_control_count += 1
+
+	# Guard: warn if some selected nodes were not Controls
+	if non_control_count > 0:
+		_set_status(
+			"%d non-Control node(s) skipped. Select only Control nodes." % non_control_count,
+			true
+		)
+
 	return result
 
 

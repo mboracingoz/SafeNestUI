@@ -24,23 +24,40 @@ static func get_safe_area() -> Rect2:
 
 
 ## Returns safe area margins (top, bottom, left, right) in pixels.
+## Falls back to MOBILE_PORTRAIT defaults if the profile or data cannot be resolved.
 static func get_safe_margins(override_profile: int = -1) -> Dictionary:
+	# Editor mode: always use the simulation profile, never the physical display.
 	if Engine.is_editor_hint():
 		var p: ProfileDefinitions.Profile = current_editor_profile
 		if override_profile != -1:
-			p = override_profile as ProfileDefinitions.Profile
+			# Guard: ensure the override value is a valid Profile enum member.
+			if ProfileDefinitions.PROFILES.has(override_profile):
+				p = override_profile as ProfileDefinitions.Profile
+			else:
+				push_warning("SafeNest UI: Invalid profile override '%d'. Falling back to current profile." % override_profile)
 		return ProfileDefinitions.get_profile_data(p)["margins"]
 
-	# Runtime logic
+	# Runtime logic: read from DisplayServer
 	var safe_rect := get_safe_area()
 	var screen_size := Vector2(DisplayServer.screen_get_size())
 
-	return {
-		"top": safe_rect.position.y,
+	# Guard: protect against zero/negative screen sizes at runtime.
+	if screen_size.x <= 0.0 or screen_size.y <= 0.0:
+		push_warning("SafeNest UI: Runtime screen size is zero. Returning zero margins.")
+		return {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0}
+
+	var margins := {
+		"top":    safe_rect.position.y,
 		"bottom": screen_size.y - safe_rect.end.y,
-		"left": safe_rect.position.x,
-		"right": screen_size.x - safe_rect.end.x,
+		"left":   safe_rect.position.x,
+		"right":  screen_size.x - safe_rect.end.x,
 	}
+
+	# Guard: clamp all margins to non-negative values.
+	for key in margins.keys():
+		margins[key] = maxf(0.0, margins[key])
+
+	return margins
 
 	
 ## Returns the ideal screen resolution depending on the selected profile (Editor) or Physical Device (Runtime).
