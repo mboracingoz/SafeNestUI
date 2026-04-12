@@ -14,6 +14,8 @@ extends Control
 
 
 func _ready() -> void:
+	# Preview sistemi için kendini dinleyici gruba ekler
+	add_to_group("safe_area_overlay")
 	# Fill the entire screen.
 	anchors_preset = PRESET_FULL_RECT
 	mouse_filter = MOUSE_FILTER_IGNORE
