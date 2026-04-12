@@ -18,7 +18,11 @@ func _parse_begin(object: Object) -> void:
 	
 	# Inspector'un en üstüne eklenecek buton
 	var button := Button.new()
-	button.text = "🎯 Apply Mobile Safe Layout"
+	button.text = " Apply Mobile Safe Layout"
+	button.icon = preload("res://addons/safenest_ui/icon.svg")
+	button.expand_icon = true
+	# Butona ikon ekleyip, boyutunu metin hizasına getirebiliriz:
+	# Godot 4'te ikon boyutu genelde otomatik ayarlanır tam sığmazsa diye.
 	
 	# Butona basıldığında çalışacak fonksiyon (UndoRedo destekli)
 	button.pressed.connect(_on_apply_pressed.bind(control))
