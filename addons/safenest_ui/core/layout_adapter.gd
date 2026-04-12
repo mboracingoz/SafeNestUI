@@ -8,7 +8,15 @@ class_name LayoutAdapter
 
 ## Applies mobile safe layout to the given Control node.
 ## For optimal Godot UI architecture, this should only be applied to a Root HUD Control or CanvasLayer child.
-static func apply_safe_layout(node: Control) -> bool:
+
+enum Placement {
+	FULL_SCREEN,
+	TOP_WIDE,
+	BOTTOM_WIDE,
+	KEEP_ANCHORS
+}
+
+static func apply_safe_layout(node: Control, placement: Placement = Placement.FULL_SCREEN) -> bool:
 	if node == null:
 		push_warning("SafeNest UI: No node provided.")
 		return false
@@ -46,17 +54,47 @@ static func apply_safe_layout(node: Control) -> bool:
 	# ------------------------------------------------
 
 	var margins := SafeAreaService.get_safe_margins()
+	var orig_height := node.size.y # Orijinal yüksekliği korumak için referans
 	
-	# Hedefi ekranı kaplayacak şekilde (Full Rect) ayarlar.
-	node.anchor_left = 0.0
-	node.anchor_top = 0.0
-	node.anchor_right = 1.0
-	node.anchor_bottom = 1.0
+	match placement:
+		Placement.FULL_SCREEN:
+			# Hedefi ekranı kaplayacak şekilde (Full Rect) ayarlar.
+			node.anchor_left = 0.0
+			node.anchor_top = 0.0
+			node.anchor_right = 1.0
+			node.anchor_bottom = 1.0
+			node.offset_left = margins["left"]
+			node.offset_top = margins["top"]
+			node.offset_right = -margins["right"]
+			node.offset_bottom = -margins["bottom"]
+			
+		Placement.TOP_WIDE:
+			# Hedefi yukarı asar, alt offset'i orjinal yüksekliğine göre çizer.
+			node.anchor_left = 0.0
+			node.anchor_top = 0.0
+			node.anchor_right = 1.0
+			node.anchor_bottom = 0.0
+			node.offset_left = margins["left"]
+			node.offset_top = margins["top"]
+			node.offset_right = -margins["right"]
+			node.offset_bottom = margins["top"] + orig_height
 
-	# Güvenli alan boşluklarını (Margins) offet olarak hedefe uygular.
-	node.offset_left = node.offset_left + margins["left"]
-	node.offset_top = node.offset_top + margins["top"]
-	node.offset_right = node.offset_right - margins["right"]
-	node.offset_bottom = node.offset_bottom - margins["bottom"]
+		Placement.BOTTOM_WIDE:
+			# Hedefi aşağı asar, üst offset'i orjinal yüksekliğine göre negatif çizer.
+			node.anchor_left = 0.0
+			node.anchor_top = 1.0
+			node.anchor_right = 1.0
+			node.anchor_bottom = 1.0
+			node.offset_left = margins["left"]
+			node.offset_top = -margins["bottom"] - orig_height
+			node.offset_right = -margins["right"]
+			node.offset_bottom = -margins["bottom"]
+
+		Placement.KEEP_ANCHORS:
+			# Anchorlara dokunmadan sadece güvenli boşlukları daraltır.
+			node.offset_left = node.offset_left + margins["left"]
+			node.offset_top = node.offset_top + margins["top"]
+			node.offset_right = node.offset_right - margins["right"]
+			node.offset_bottom = node.offset_bottom - margins["bottom"]
 
 	return true
