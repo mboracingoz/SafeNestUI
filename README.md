@@ -1,5 +1,9 @@
 # 📱 SafeNest UI
 
+## 🚀 Fix your mobile UI in seconds — no more safe area headaches.
+SafeNest UI lets you instantly adapt your UI to notches, aspect ratios, and unsafe screen areas directly inside the Godot editor.
+No more build → test → fix → repeat cycle.
+
 A professional-grade, cross-platform UI Safe Area simulator and smart layout manager for Godot 4. Manage notches, taskbars, and safe margin bounds seamlessly directly within the editor!
 
 ---
@@ -19,13 +23,15 @@ Normally, to test if your UI overlaps with a notch, you have to export the game 
 
 SafeNest UI is completely **stateless and non-destructive**. 
 
-When you apply a safe layout to a UI element, the addon quietly caches your original, pristine layout inside the node's `meta` data. This means you can swap between a "Mobile Portrait" simulation and a "Tablet Landscape" simulation infinitely without your UI permanently shrinking or tearing (additive distortion). 
+It intelligently remembers your original layout via Godot's metadata system. This means you can swap between a "Mobile Portrait" simulation and a "Tablet Landscape" simulation infinitely without your UI permanently shrinking or tearing. 
 
-At runtime, the `SafeAreaService` automatically asks the OS (`DisplayServer`) for the real physical safe area and applies your exact design logic mathematically.
+At runtime, the background service automatically detects the real physical device constraints and applies your exact design logic perfectly.
 
 ---
 
 ## 👁️ Preview vs Apply
+
+### 🛡️ Safe workflow — never break your UI
 
 The addon uses a highly protective Dock Panel workflow:
 
@@ -52,6 +58,9 @@ Want to see it in action without risking your own project?
 Open `addons/safenest_ui/demo/demo_smart_placement.tscn`.
 
 This file contains a fully configured "Customer Demo" featuring a real-world Game HUD (Top Bar with Health/Scores, Bottom Bar with Joystick/Attack skills). 
+
+**This is the exact scene used in the demo GIF.**
+
 1. Open the scene.
 2. Select a profile from the **SafeNest UI** dock.
 3. Click **Preview Overlay** to see the notch boundaries.
@@ -74,5 +83,9 @@ The V1 release focuses on robust Editor workflow and mathematical stability:
 
 ---
 
-### License
-[MIT License](LICENSE)
+## License
+
+This asset is a commercial product.
+
+You are allowed to use it in personal and commercial projects.
+Redistribution, resale, or sharing the source code is not allowed.
