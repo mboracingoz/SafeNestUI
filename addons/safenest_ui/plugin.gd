@@ -4,7 +4,7 @@ extends EditorPlugin
 const DOCK_SCENE := preload("res://addons/safenest_ui/editor/dock_panel.tscn")
 const INSPECTOR_PLUGIN_SCRIPT := preload("res://addons/safenest_ui/editor/inspector_plugin.gd")
 
-var _dock_panel: VBoxContainer
+var _dock_panel: ScrollContainer
 var _inspector_plugin: EditorInspectorPlugin
 
 

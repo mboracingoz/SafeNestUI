@@ -1,5 +1,5 @@
 @tool
-extends VBoxContainer
+extends ScrollContainer
 
 var _editor_plugin: EditorPlugin
 var _undo_redo: EditorUndoRedoManager
@@ -86,11 +86,17 @@ func _on_apply_res_pressed() -> void:
 
 
 func _on_apply_layout_pressed() -> void:
-	var valid_controls := _get_selected_controls()
-	if valid_controls.is_empty():
+	var result := _get_selected_controls()
+	if result["non_control_count"] > 0 and result["controls"].is_empty():
+		_set_status("%d selected node(s) are not Controls. Select a Control node." % result["non_control_count"], true)
+		return
+	if result["controls"].is_empty():
 		_set_status("No Control node selected.", true)
 		return
+	if result["non_control_count"] > 0:
+		_set_status("%d non-Control node(s) skipped." % result["non_control_count"], true)
 
+	var valid_controls: Array[Control] = result["controls"]
 	var placement_val := %PlacementDropdown.get_selected_id() as LayoutAdapter.Placement
 
 	_undo_redo.create_action("SafeNest: Apply Safe Layout")
@@ -110,14 +116,31 @@ func _on_apply_layout_pressed() -> void:
 
 
 func _on_restore_pressed() -> void:
-	var valid_controls := _get_selected_controls()
-	if valid_controls.is_empty():
+	var result := _get_selected_controls()
+	if result["non_control_count"] > 0 and result["controls"].is_empty():
+		_set_status("%d selected node(s) are not Controls." % result["non_control_count"], true)
+		return
+	if result["controls"].is_empty():
 		_set_status("No Control node selected.", true)
 		return
 
-	var restored := 0
-	_undo_redo.create_action("SafeNest: Restore Original Layout")
+	var valid_controls: Array[Control] = result["controls"]
+
+	# Pre-check: only restore nodes that actually have a cached layout.
+	var cacheable: Array[Control] = []
+	var skipped_no_cache := 0
 	for control in valid_controls:
+		if control.has_meta("safenest_original_layout"):
+			cacheable.append(control)
+		else:
+			skipped_no_cache += 1
+
+	if cacheable.is_empty():
+		_set_status("No cached layout found. Apply a Safe Layout first.", true)
+		return
+
+	_undo_redo.create_action("SafeNest: Restore Original Layout")
+	for control in cacheable:
 		_undo_redo.add_undo_property(control, "anchor_left",   control.anchor_left)
 		_undo_redo.add_undo_property(control, "anchor_top",    control.anchor_top)
 		_undo_redo.add_undo_property(control, "anchor_right",  control.anchor_right)
@@ -127,13 +150,12 @@ func _on_restore_pressed() -> void:
 		_undo_redo.add_undo_property(control, "offset_right",  control.offset_right)
 		_undo_redo.add_undo_property(control, "offset_bottom", control.offset_bottom)
 		_undo_redo.add_do_method(LayoutAdapter, "restore_original_layout", control)
-		restored += 1
 	_undo_redo.commit_action()
 
-	if restored > 0:
-		_set_status("Restored %d node(s) to original layout." % restored, false)
-	else:
-		_set_status("No cached layout found on selected node(s).", true)
+	var msg := "Restored %d node(s)." % cacheable.size()
+	if skipped_no_cache > 0:
+		msg += " (%d had no cache, skipped.)" % skipped_no_cache
+	_set_status(msg, false)
 
 
 func update_selected_node_label(text: String) -> void:
@@ -142,13 +164,10 @@ func update_selected_node_label(text: String) -> void:
 
 # --- Helpers ---
 
-func _get_selected_controls() -> Array[Control]:
+# Returns a Dictionary: { "controls": Array[Control], "non_control_count": int }
+func _get_selected_controls() -> Dictionary:
 	var selection := _editor_plugin.get_editor_interface().get_selection()
 	var selected_nodes := selection.get_selected_nodes()
-
-	# Guard: nothing selected at all
-	if selected_nodes.is_empty():
-		return []
 
 	var result: Array[Control] = []
 	var non_control_count := 0
@@ -158,14 +177,7 @@ func _get_selected_controls() -> Array[Control]:
 		else:
 			non_control_count += 1
 
-	# Guard: warn if some selected nodes were not Controls
-	if non_control_count > 0:
-		_set_status(
-			"%d non-Control node(s) skipped. Select only Control nodes." % non_control_count,
-			true
-		)
-
-	return result
+	return {"controls": result, "non_control_count": non_control_count}
 
 
 func _set_status(message: String, is_error: bool) -> void:
