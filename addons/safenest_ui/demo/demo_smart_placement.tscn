@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://6ss63k7cthqx"]
+[gd_scene load_steps=2 format=3 uid="uid://6ss63k7cthqx"]
 
-[ext_resource type="Script" uid="uid://1m5l41wh7xfg" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
+[ext_resource type="Script" path="res://addons/safenest_ui/runtime/safe_area_overlay.gd" id="1"]
 
-[node name="SmartPlacementDemo" type="Control" unique_id=1634946736]
+[node name="SafeNestDemo" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,16 +10,256 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="ColorRect" parent="." unique_id=1170021762]
+[node name="GameBackground" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0980392, 0.117647, 0.156863, 1)
+color = Color(0.06, 0.07, 0.1, 1)
 
-[node name="SafeAreaOverlay" type="Control" parent="." unique_id=956597513 groups=["safe_area_overlay"]]
+[node name="GridLines" type="GridContainer" parent="GameBackground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WorldLabel" type="Label" parent="GameBackground"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -20.0
+offset_right = 220.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.08)
+theme_override_font_sizes/font_size = 22
+text = "[ GAME WORLD — FILLS ENTIRE SCREEN ]"
+horizontal_alignment = 1
+
+[node name="HUD_Root" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="ColorRect" parent="HUD_Root"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 72.0
+grow_horizontal = 2
+color = Color(0.08, 0.09, 0.14, 0.92)
+
+[node name="ScoreLabel" type="Label" parent="HUD_Root/TopBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -14.0
+offset_right = 80.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "⭐  10,420"
+horizontal_alignment = 1
+
+[node name="SettingsBtn" type="Button" parent="HUD_Root/TopBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -20.0
+offset_right = 56.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "⚙"
+flat = true
+
+[node name="PauseBtn" type="Button" parent="HUD_Root/TopBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -20.0
+offset_right = -12.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "⏸"
+flat = true
+
+[node name="HPLabel" type="Label" parent="HUD_Root/TopBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -10.0
+offset_right = 160.0
+offset_bottom = 10.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+text = "❤ ❤ ❤ ❤ ❤"
+
+[node name="CenterHUD" type="ColorRect" parent="HUD_Root"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -110.0
+offset_right = 200.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.12, 0.18, 0.88)
+
+[node name="Border" type="ColorRect" parent="HUD_Root/CenterHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3, 0.6, 1.0, 0.4)
+z_index = -1
+
+[node name="HUDTitle" type="Label" parent="HUD_Root/CenterHUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 10.0
+offset_bottom = 36.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 1.0, 1)
+theme_override_font_sizes/font_size = 14
+text = "🪺  SafeNest UI — Customer Demo"
+horizontal_alignment = 1
+
+[node name="HUDBody" type="Label" parent="HUD_Root/CenterHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 44.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 1)
+theme_override_font_sizes/font_size = 12
+text = "1. Pick a profile from the Dock (Mobile / Tablet / Web...)
+2. Click  Preview Overlay  — red zones appear instantly
+3. Select TopBar → apply  Top Wide
+4. Select BottomBar → apply  Bottom Wide
+5. Profile changed? Hit Apply again — no corruption!"
+autowrap_mode = 2
+
+[node name="BottomBar" type="ColorRect" parent="HUD_Root"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.08, 0.09, 0.14, 0.92)
+
+[node name="AttackBtn" type="Button" parent="HUD_Root/BottomBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -176.0
+offset_top = -32.0
+offset_right = -96.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "⚔"
+
+[node name="SkillBtn" type="Button" parent="HUD_Root/BottomBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -32.0
+offset_right = -8.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "🔥"
+
+[node name="JoystickArea" type="ColorRect" parent="HUD_Root/BottomBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -36.0
+offset_right = 88.0
+offset_bottom = 36.0
+grow_vertical = 2
+color = Color(1, 1, 1, 0.12)
+
+[node name="JoyLabel" type="Label" parent="HUD_Root/BottomBar/JoystickArea"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -10.0
+offset_right = 20.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "🕹"
+horizontal_alignment = 1
+
+[node name="SafeAreaOverlay" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,102 +268,3 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1")
-
-[node name="HUD_Container" type="Control" parent="." unique_id=642856956]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TopStatusPanel" type="ColorRect" parent="HUD_Container" unique_id=852881374]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 44.0
-offset_bottom = 114.0
-grow_horizontal = 2
-color = Color(0.180392, 0.419608, 0.65098, 1)
-metadata/safenest_original_layout = {
-"anchor_bottom": 0.0,
-"anchor_left": 0.0,
-"anchor_right": 1.0,
-"anchor_top": 0.0,
-"offset_bottom": 70.0,
-"offset_left": 0.0,
-"offset_right": 0.0,
-"offset_top": 0.0
-}
-
-[node name="Label" type="Label" parent="HUD_Container/TopStatusPanel" unique_id=759973326]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "1. TEST ZONE (TOP BAR)
-Select 'Top Wide' from Dock & Apply!"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BottomActionPanel" type="ColorRect" parent="HUD_Container" unique_id=447865309]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -100.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.65098, 0.321569, 0.180392, 1)
-metadata/safenest_original_layout = {
-"anchor_bottom": 1.0,
-"anchor_left": 0.0,
-"anchor_right": 1.0,
-"anchor_top": 1.0,
-"offset_bottom": 0.0,
-"offset_left": 0.0,
-"offset_right": 0.0,
-"offset_top": -100.0
-}
-
-[node name="Label" type="Label" parent="HUD_Container/BottomActionPanel" unique_id=778116965]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "2. TEST ZONE (BOTTOM BAR)
-Select 'Bottom Wide' from Dock & Apply!"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CenterMainMenu" type="ColorRect" parent="HUD_Container" unique_id=26580176]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.192157, 0.254902, 0.34902, 1)
-
-[node name="Label" type="Label" parent="HUD_Container/CenterMainMenu" unique_id=343581049]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "3. TEST ZONE (CENTER)
-Select 'Keep Anchors' from Dock & Apply!"
-horizontal_alignment = 1
-vertical_alignment = 1

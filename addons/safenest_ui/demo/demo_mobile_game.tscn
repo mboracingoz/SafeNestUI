@@ -40,6 +40,16 @@ offset_top = 44.0
 offset_bottom = -34.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/safenest_original_layout = {
+"anchor_bottom": 1.0,
+"anchor_left": 0.0,
+"anchor_right": 1.0,
+"anchor_top": 0.0,
+"offset_bottom": -34.0,
+"offset_left": 0.0,
+"offset_right": 0.0,
+"offset_top": 44.0
+}
 
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayerHUD/HUD_Container" unique_id=821062898]
 layout_mode = 1
@@ -152,6 +162,11 @@ text = "💡 HOW IT WORKS:
 Watch carefully! The Joystick, Buttons, and Health bar will perfectly shrink INWARD to escape the red danger zones (notches/taskbars). But the Green Game World will stay full screen!"
 autowrap_mode = 2
 
+[node name="Button" type="Button" parent="CanvasLayerHUD/HUD_Container" unique_id=1829191011]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
 [node name="SafeAreaOverlay" type="Control" parent="CanvasLayerHUD" unique_id=1034861361]
 layout_mode = 3
 anchors_preset = 15
@@ -161,3 +176,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=63110821]
