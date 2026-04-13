@@ -4,65 +4,75 @@ A professional-grade, cross-platform UI Safe Area simulator and smart layout man
 
 ---
 
-## ⚡ Overview
+## 🛑 What problem it solves
 
-Mobile and cross-platform UI development doesn't have to be a guessing game. **SafeNest UI** allows developers to simulate how their UI will look on various devices (Phones, Tablets, Web Browsers) *without leaving the Godot editor* or needing to export the project. 
+When designing UI for mobile devices or web browsers, developers face "unsafe" screen areas:
+- iPhone/Android notches and punch-holes
+- Bottom home-swipe indicators (Home Bars)
+- Browser UI overlays
 
-It provides a unified **Dock Panel** to preview safe areas non-destructively and instantly adapt your UI components using **Smart Placement** algorithms.
-
----
-
-## 🔥 Key Features
-
-### 🎮 Multi-Device Simulation Profile
-Instantly preview how your application looks across different form factors. Built-in constraints include:
-- `Mobile Portrait` & `Mobile Landscape`
-- `Tablet Portrait`
-- `Desktop 16:9` (Windowed simulation)
-- `Web Browser 16:9`
-
-### 🛡️ Non-Destructive Preview
-Easily preview safe boundaries and comfort margins with a visual red overlay directly on your 2D canvas without permanently modifying your `ProjectSettings`. Want to officially scale the Editor window to match? Just hit the "Apply Resolution" button.
-
-### 🧠 Smart Placement Auto-Layout
-Godot UI anchors can be tricky. SafeNest UI comes with an intelligent layout adapter that avoids destructively stretching sub-components:
-- **Full Screen:** Adapts root canvas elements to the exact safe zone padding.
-- **Top Wide:** Snaps top-bars cleanly beneath notches without altering original heights.
-- **Bottom Wide:** Snaps bottom action-bars cleanly above home-indicators.
-- **Keep Anchors:** Preserves your custom ratios, applying protective margin padding dynamically.
-
-### 💾 Stateless Layout Memory
-Mistakes happen, device targets change. SafeNest UI inherently caches your original node layouts via Godot's internal metadata system. You can switch between 5 different device profiles and the addon will perfectly reset your UI to its original pristine state before computing the new margins. No infinite squashing, no UI corruption!
+Normally, to test if your UI overlaps with a notch, you have to export the game to a physical phone, see it looks broken, adjust margins, and export again. **SafeNest UI eliminates this iteration loop.** It brings the physical device's "unsafe boundaries" right into your Godot Editor, allowing you to adapt your `Control` nodes with one click.
 
 ---
 
-## 🕹️ Quick Start Guide
+## ⚙️ How it works
 
-1. **Install:** Copy `addons/safenest_ui` to your project and activate from **Project Settings → Plugins**.
-2. **Access the Hub:** A new `SafeNest UI` tab will appear in your godot Dock.
-3. **Simulate:** Select an emulation profile (e.g., *Mobile Portrait*) and click **Preview Profile**. 
-4. **Target:** Select your root UI node or your specific HUD bar in the scene tree.
-5. **Apply Smart Placement:** From the Dock Dropdown, specify how your UI should behave (e.g. `Top Wide`) and hit **Apply Safe Layout**.
+SafeNest UI is completely **stateless and non-destructive**. 
 
-*💡 Try out the provided demonstration environment in `addons/safenest_ui/demo/demo_smart_placement.tscn` to master the mechanics!*
+When you apply a safe layout to a UI element, the addon quietly caches your original, pristine layout inside the node's `meta` data. This means you can swap between a "Mobile Portrait" simulation and a "Tablet Landscape" simulation infinitely without your UI permanently shrinking or tearing (additive distortion). 
+
+At runtime, the `SafeAreaService` automatically asks the OS (`DisplayServer`) for the real physical safe area and applies your exact design logic mathematically.
 
 ---
 
-## 🏗️ Technical Architecture
-The addon was engineered with enterprise-level precision using the Single Responsibility Principle (SRP):
-*   `ProfileDefinitions`: Pure static data layer for form factors.
-*   `SafeAreaService`: Core service handling margin conversions and logic dispatching.
-*   `ProjectProfileApplier`: Strict mutator that explicitly isolates `ProjectSettings` overriding actions.
-*   `LayoutAdapter`: The stateless layout engine fully supporting Godot's `EditorUndoRedoManager` ecosystem.
+## 👁️ Preview vs Apply
+
+The addon uses a highly protective Dock Panel workflow:
+
+- **Preview (Non-Destructive):** Renders a red transparent overlay over your game canvas showing exactly where the "danger zones" (notches/bars) are for the selected profile. **This does NOT modify your nodes or your project.**
+- **Apply Layout (Reversible):** Shrinks, moves, or pads your selected `Control` nodes to safely escape the red zones. Fully supports Godot's Undo (`Ctrl+Z`) and can be reverted anytime via the `Restore Original Layout` button.
+- **Apply Resolution (Destructive ⚠):** Actually changes your `ProjectSettings` Window Size to match the simulated device. Use this only when you want to permanently change your base workspace resolution.
 
 ---
 
-## 🛣️ Roadmap
-- Custom User Profiles (Defining custom resolutions and notch values)
-- Visual Live Editors
-- Runtime Reactive Safe Area Nodes
+## 🧩 Smart Placement Modes
+
+Godot UI anchors can be tricky. SafeNest UI comes with an intelligent layout adapter that avoids destructively stretching sub-components. Select a node, pick a placement mode, and press Apply:
+
+1. **Full Screen (Root HUD):** Applies safe area margins uniformly from all 4 sides. Best used on the main transparent `Control` that holds your entire UI.
+2. **Top Wide (Upper Bar):** Snaps a top-bar cleanly beneath top notches, stretching horizontally but strictly preserving your original height.
+3. **Bottom Wide (Lower Bar):** Snaps a bottom action-bar cleanly above home-indicators, preserving original height.
+4. **Keep Anchors (Offsets Only):** Preserves your custom centering and anchoring, softly pushing the offsets inward only if they violate a safe margin.
 
 ---
 
-## 📄 License
+## 🕹️ Demo Scene
+
+Want to see it in action without risking your own project? 
+Open `addons/safenest_ui/demo/demo_smart_placement.tscn`.
+
+This file contains a fully configured "Customer Demo" featuring a real-world Game HUD (Top Bar with Health/Scores, Bottom Bar with Joystick/Attack skills). 
+1. Open the scene.
+2. Select a profile from the **SafeNest UI** dock.
+3. Click **Preview Overlay** to see the notch boundaries.
+4. Select `TopBar` and apply **Top Wide**.
+5. Select `BottomBar` and apply **Bottom Wide**.
+Watch how the UI intelligently dodges the hardware constraints!
+
+---
+
+## 📦 Current V1 Scope
+
+The V1 release focuses on robust Editor workflow and mathematical stability:
+- 5 Built-in simulation profiles (Mobile Portrait/Landscape, Tablet, Web, Desktop).
+- Comprehensive Edge-case handling (rejects invalid nodes, heals corrupted cache, prevents zero-margin runtime divides).
+- Undo/Redo integration.
+- Intelligent `LayoutAdapter` and runtime `SafeAreaService`.
+- 100% GDScript, zero external dependencies.
+
+*Future updates will focus on user-defined custom device profiles and visual runtime-reactive nodes.*
+
+---
+
+### License
 [MIT License](LICENSE)
